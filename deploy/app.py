@@ -6,24 +6,30 @@ import numpy as np
 # Load model
 model = load_model('model_CNN.keras')
 
-# Class labels and their corresponding icons (icons from a placeholder URL for each vegetable)
+# Class labels and additional information
 class_labels = [
-    {"name": "Bean", "icon": "https://example.com/icons/bean.png"},
-    {"name": "Bitter_Gourd", "icon": "https://example.com/icons/bitter_gourd.png"},
-    {"name": "Bottle_Gourd", "icon": "https://example.com/icons/bottle_gourd.png"},
-    {"name": "Brinjal", "icon": "https://example.com/icons/brinjal.png"},
-    {"name": "Broccoli", "icon": "https://example.com/icons/broccoli.png"},
-    {"name": "Cabbage", "icon": "https://example.com/icons/cabbage.png"},
-    {"name": "Capsicum", "icon": "https://example.com/icons/capsicum.png"},
-    {"name": "Carrot", "icon": "https://example.com/icons/carrot.png"},
-    {"name": "Cauliflower", "icon": "https://example.com/icons/cauliflower.png"},
-    {"name": "Cucumber", "icon": "https://example.com/icons/cucumber.png"},
-    {"name": "Papaya", "icon": "https://example.com/icons/papaya.png"},
-    {"name": "Potato", "icon": "https://example.com/icons/potato.png"},
-    {"name": "Pumpkin", "icon": "https://example.com/icons/pumpkin.png"},
-    {"name": "Radish", "icon": "https://example.com/icons/radish.png"},
-    {"name": "Tomato", "icon": "https://example.com/icons/tomato.png"}
+    "Bean", "Bitter_Gourd", "Bottle_Gourd", "Brinjal", "Broccoli",
+    "Cabbage", "Capsicum", "Carrot", "Cauliflower", "Cucumber",
+    "Papaya", "Potato", "Pumpkin", "Radish", "Tomato"
 ]
+
+vegetable_info = {
+    "Broccoli": "Rich in vitamins K and C, broccoli supports bone health and immune function.",
+    "Capsicum": "High in vitamin C, capsicum helps improve skin health and boost immunity.",
+    "Bottle_Gourd": "Low in calories and high in fiber, great for digestion and hydration.",
+    "Radish": "Contains antioxidants and supports detoxification.",
+    "Tomato": "A great source of lycopene, an antioxidant linked to heart health.",
+    "Brinjal": "Rich in fiber and low in calories, helps control blood sugar levels.",
+    "Pumpkin": "Packed with vitamin A, supports vision and skin health.",
+    "Carrot": "Excellent source of beta-carotene, essential for eye health.",
+    "Papaya": "Rich in enzymes that aid digestion and high in vitamin C.",
+    "Cabbage": "Contains antioxidants and supports gut health.",
+    "Bitter_Gourd": "Helps regulate blood sugar levels and is high in vitamins.",
+    "Cauliflower": "Rich in fiber and B-vitamins, promotes brain health.",
+    "Bean": "Good source of plant-based protein and supports heart health.",
+    "Cucumber": "Hydrating and cooling, contains antioxidants and vitamins.",
+    "Potato": "Rich in potassium, supports energy and muscle function."
+}
 
 # Custom styles
 st.set_page_config(
@@ -86,11 +92,11 @@ def custom_css():
                 text-align: center;
                 margin-bottom: 10px;
             }
-            .veg-icon {
-                display: block;
-                margin: 0 auto 10px;
-                max-width: 50px;
-                max-height: 50px;
+            .veg-description {
+                font-size: 14px;
+                color: gray;
+                text-align: center;
+                margin-bottom: 10px;
             }
         </style>
         """,
@@ -103,17 +109,11 @@ custom_css()
 st.markdown("<h1 style='color: #4CAF50;'>🍅 Vegetable Classifier</h1>", unsafe_allow_html=True)
 st.markdown("<p>Upload an image and let the AI predict the vegetable type!</p>", unsafe_allow_html=True)
 
-# Display the vegetable list with icons in a grid layout
+# Display the vegetable list in a grid layout
 st.markdown("### Available Vegetables")
 st.markdown(
     "<div class='veg-list'>"
-    + "".join([
-        f"<div class='veg-item'>"
-        f"<img class='veg-icon' src='{veg['icon']}' alt='{veg['name']} icon'>"
-        f"<p class='veg-title'>{veg['name']}</p>"
-        f"</div>"
-        for veg in class_labels
-    ])
+    + "".join([f"<div class='veg-item'><p class='veg-title'>{veg}</p></div>" for veg in class_labels])
     + "</div>",
     unsafe_allow_html=True,
 )
@@ -132,7 +132,7 @@ if uploaded_file is not None:
 
     # Make prediction
     predictions = model.predict(image_array)
-    predicted_class = class_labels[np.argmax(predictions)]['name']
+    predicted_class = class_labels[np.argmax(predictions)]
     confidence = np.max(predictions)
 
     # Display results
@@ -144,6 +144,11 @@ if uploaded_file is not None:
         f"<p style='color: gray;'>Confidence: {confidence:.2f}</p>",
         unsafe_allow_html=True,
     )
+
+    # Display additional information
+    if predicted_class in vegetable_info:
+        st.markdown(f"### Fun Fact about {predicted_class}:")
+        st.write(vegetable_info[predicted_class])
 
 # Footer
 st.markdown("<hr>", unsafe_allow_html=True)
