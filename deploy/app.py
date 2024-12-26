@@ -67,6 +67,37 @@ def custom_css():
             .stFileUploader {
                 text-align: center;
             }
+            /* Vegetable List Styling */
+            .veg-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+                padding: 0 20px;
+            }
+            .veg-item {
+                background-color: #ffffff;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease;
+            }
+            .veg-item:hover {
+                transform: translateY(-5px);
+            }
+            .veg-title {
+                font-weight: bold;
+                font-size: 16px;
+                color: #4CAF50;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            .veg-description {
+                font-size: 14px;
+                color: gray;
+                text-align: center;
+                margin-bottom: 10px;
+            }
         </style>
         """,
         unsafe_allow_html=True,
@@ -77,7 +108,15 @@ custom_css()
 # Main title
 st.markdown("<h1 style='color: #4CAF50;'>🍅 Vegetable Classifier</h1>", unsafe_allow_html=True)
 st.markdown("<p>Upload an image and let the AI predict the vegetable type!</p>", unsafe_allow_html=True)
-st.markdown("list vegetable :Bean, Bitter_Gourd, Bottle_Gourd, Brinjal, Broccoli,Cabbage, Capsicum, Carrot, Cauliflower, Cucumber,Papaya, Potato, Pumpkin, Radish,Tomato</p>", unsafe_allow_html=True)
+
+# Display the vegetable list in a grid layout
+st.markdown("### Available Vegetables")
+st.markdown(
+    "<div class='veg-list'>"
+    + "".join([f"<div class='veg-item'><p class='veg-title'>{veg}</p><p class='veg-description'>{vegetable_info.get(veg, 'No information available.')}</p></div>" for veg in class_labels])
+    + "</div>",
+    unsafe_allow_html=True,
+)
 
 # Upload file
 uploaded_file = st.file_uploader("Upload a Vegetable Image", type=["jpg", "jpeg", "png"])
