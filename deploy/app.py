@@ -77,6 +77,7 @@ custom_css()
 # Main title
 st.markdown("<h1 style='color: #4CAF50;'>🍅 Vegetable Classifier</h1>", unsafe_allow_html=True)
 st.markdown("<p>Upload an image and let the AI predict the vegetable type!</p>", unsafe_allow_html=True)
+st.markdown("list vegetable :Bean, Bitter_Gourd, Bottle_Gourd, Brinjal, Broccoli,Cabbage, Capsicum, Carrot, Cauliflower, Cucumber,Papaya, Potato, Pumpkin, Radish,Tomato</p>", unsafe_allow_html=True)
 
 # Upload file
 uploaded_file = st.file_uploader("Upload a Vegetable Image", type=["jpg", "jpeg", "png"])
